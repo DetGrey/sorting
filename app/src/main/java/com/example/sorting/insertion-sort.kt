@@ -7,12 +7,12 @@ fun main() {
         "cherry", "plum", "apricot", "blackberry", "papaya"
     )
 
-    insertionSort(unsortedStrings)
+    println("Unsorted:")
+    println(unsortedStrings)
+    println()
 
-//    println("Unsorted:")
-//    println(unsortedStrings)
-//    println("Sorted:")
-//    println()
+    println("Sorted:")
+    println(insertionSort(unsortedStrings))
 }
 
 /* Implement the [insertion sort](https://www.youtube.com/watch?v=O0VbBkUvriI) algorithm with
@@ -28,29 +28,42 @@ val unsortedStrings = listOf("banana", "apple", "orange", "grape", "kiwi",
 - [Visualisation](https://youtu.be/JU767SDMDvA?si=3pT2PlxJW48F3wll)
  */
 
-fun insertionSort(list: List<String>) {
+fun insertionSort(list: List<String>): MutableList<String> {
     val sortedList: MutableList<String> = list.toMutableList()
     // Mark first word as sorted
     // Look at next word and see if it should come before the first
     // if the two words should be swapped, do that, else mark as sorted
 
-    var i = 1
+
+    var i = 1 // Since the first word is already sorted, we start at index 1
 
     while (i < list.size) {
 
-        for (j in 0..i) {
-            if (sortedList[i] < sortedList[j]) {
-                val temp = sortedList[i]
-                sortedList[j+1] = sortedList[j]
-                sortedList[j] = temp
+        if (sortedList[i] < sortedList[i-1]) { // If the first unsorted item should come before the last sorted item
+//            println("${sortedList[i]}")
+            var sortedIndex = i - 1
+            var unsortedIndex = i
+
+            while (sortedIndex >= 0) { // Iterate through the sorted items
+//                println()
+//                println("Is ${sortedList[unsortedIndex]}[$unsortedIndex] < ${sortedList[sortedIndex]}[$sortedIndex]")
+
+                if (sortedList[unsortedIndex] < sortedList[sortedIndex]) { // If unsorted item is less than sorted item
+//                    println("yes")
+                    val temp = sortedList[unsortedIndex]
+                    sortedList[unsortedIndex] = sortedList[sortedIndex]
+                    sortedList[sortedIndex] = temp
+                    unsortedIndex--
+                }
+                else {
+//                    println("no")
+                    break // Stop looking through the sorted items when hitting the first item that it is not less than
+                }
+                sortedIndex--
             }
         }
 
-        println(list[i])
-        println(sortedList)
         i++
-
     }
-
-
+    return sortedList
 }
